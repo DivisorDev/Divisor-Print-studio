@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <title>Shop</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+    <span>DIVISOR</span> Print Studio
+  </div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="customize.html">Design</a>
+    <a href="shop.html">Shop</a>
+    <a href="admin-login.html" class="admin-btn">Admin</a>
+  </div>
+</nav>
+
+<div class="shop-container">
+  <div class="shop-header">
+    <h2>Available Products</h2>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 30px; padding: 0 5%;">
+    <div id="shop" class="shop-grid" style="padding: 0;"></div>
+    
+    <div id="cart-section" style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd; height: fit-content; position: sticky; top: 100px;">
+      <h3>Your Cart</h3>
+      <p style="color: #777;">Your cart is empty</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/shop.js"></script>
+</body>
+</html>
