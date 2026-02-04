@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Divisor Print Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary:#6c2bd9;
+      --secondary:#ff7a18;
+      --dark:#1e1e2f;
+      --light:#f5f6fa;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+    body{background:var(--light);color:#333}
+    header{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:20px}
+    header h1{font-size:28px}
+    nav{margin-top:10px}
+    nav a{color:#fff;margin-right:15px;text-decoration:none;font-weight:500}
+    .container{padding:40px 8%}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+    .hero h2{font-size:36px;color:var(--dark)}
+    .hero p{margin:15px 0}
+    .btn{display:inline-block;padding:12px 25px;background:var(--primary);color:#fff;border-radius:30px;text-decoration:none}
+    .products{margin-top:60px}
+    .products h2{text-align:center;margin-bottom:30px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px}
+    .card{background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:20px;text-align:center}
+    .card img{width:100%;height:160px;object-fit:cover;border-radius:10px}
+    .card h3{margin:10px 0}
+    .card button{margin-top:10px;border:none;padding:8px 16px;background:var(--secondary);color:#fff;border-radius:20px;cursor:pointer}
+    .admin{margin-top:80px;background:#fff;padding:30px;border-radius:20px}
+    .admin h2{text-align:center;margin-bottom:20px}
+    .admin input,.admin textarea{width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ccc}
+    footer{background:var(--dark);color:#fff;padding:40px;margin-top:80px}
+    footer .grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+    footer h3{margin-bottom:10px}
+    footer p,footer a{font-size:14px;color:#ddd;text-decoration:none}
+    @media(max-width:768px){.hero{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Divisor Print Studio</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="container hero" id="home">
+    <div>
+      <h2>Custom Printing Solutions</h2>
+      <p>T‑Shirts, Hoodies, Mugs, Caps, Bottles, Keychains & more. Premium quality printing for personal & business needs.</p>
+      <a class="btn" href="#products">Explore Products</a>
+    </div>
+    <div>
+      <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38" style="width:100%;border-radius:20px" />
+    </div>
+  </section>
+
+  <section class="container products" id="products">
+    <h2>Our Products</h2>
+    <div class="grid" id="productGrid"></div>
+  </section>
+
+  <section class="container admin">
+    <h2>Admin Panel (Local)</h2>
+    <input id="pname" placeholder="Product Name" />
+    <input id="pimg" placeholder="Image URL" />
+    <textarea id="pdesc" placeholder="Description"></textarea>
+    <button class="btn" onclick="addProduct()">Add Product</button>
+  </section>
+
+  <section class="container" id="about">
+    <h2>About Us</h2>
+    <p>Divisor Print Studio is a professional custom printing business providing high‑quality products with fast delivery and affordable pricing. We work with the latest printing technology to deliver best results.</p>
+  </section>
+
+  <footer id="contact">
+    <div class="grid">
+      <div>
+        <h3>Divisor Print Studio</h3>
+        <p>Your one‑stop custom printing solution.</p>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <p>Phone: +91 XXXXXXXXXX</p>
+        <p>Email: divisorprint@gmail.com</p>
+      </div>
+      <div>
+        <h3>Address</h3>
+        <p>Your Shop Address Here</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let products = JSON.parse(localStorage.getItem('products')) || [
+      {name:'Custom T‑Shirt',img:'https://images.unsplash.com/photo-1520975916090-3105956dac38',desc:'High quality printed t‑shirts'},
+      {name:'Printed Mug',img:'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5',desc:'Photo & logo mugs'}
+    ];
+
+    function render(){
+      const grid=document.getElementById('productGrid');
+      grid.innerHTML='';
+      products.forEach((p,i)=>{
+        grid.innerHTML+=`<div class="card"><img src="${p.img}"><h3>${p.name}</h3><p>${p.desc}</p><button onclick="removeProduct(${i})">Remove</button></div>`;
+      });
+      localStorage.setItem('products',JSON.stringify(products));
+    }
+
+    function addProduct(){
+      const name=pname.value,img=pimg.value,desc=pdesc.value;
+      if(!name||!img) return alert('Fill details');
+      products.push({name,img,desc});
+      render();
+      pname.value=pimg.value=pdesc.value='';
+    }
+
+    function removeProduct(i){products.splice(i,1);render();}
+    render();
+  </script>
+</body>
+</html>
