@@ -64,15 +64,40 @@
 
   <section class="container products" id="products">
     <h2>Our Products</h2>
+
+    <div style="text-align:center;margin-bottom:20px">
+      <button class="btn" onclick="filterCategory('all')">All</button>
+      <button class="btn" onclick="filterCategory('tshirt')">T-Shirts</button>
+      <button class="btn" onclick="filterCategory('mug')">Mugs</button>
+      <button class="btn" onclick="filterCategory('uniform')">School / Uniforms</button>
+      <button class="btn" onclick="filterCategory('bulk')">Bulk / Corporate</button>
+    </div>
+
     <div class="grid" id="productGrid"></div>
+
+    <div style="text-align:center;margin-top:30px">
+      <h3>📖 View Our Catalogue</h3>
+      <a class="btn" href="catalogue.pdf" target="_blank">View Catalogue</a>
+      <a class="btn" href="catalogue.pdf" download>Download Catalogue</a>
+    </div>
+
+    <p style="text-align:center;margin-top:20px">Bulk Orders available for <b>School Uniforms, Events, Custom Mugs & Corporate Printing</b>.<br>
+      <a class="btn" href="https://wa.me/918679219613" target="_blank">Contact on WhatsApp</a>
+    </p>
   </section>
 
   <section class="container admin">
-    <h2>Admin Panel (Local)</h2>
-    <input id="pname" placeholder="Product Name" />
-    <input id="pimg" placeholder="Image URL" />
-    <textarea id="pdesc" placeholder="Description"></textarea>
-    <button class="btn" onclick="addProduct()">Add Product</button>
+    <h2>Admin Panel (Protected)</h2>
+    <input id="adminPass" type="password" placeholder="Enter Admin Password" />
+    <button class="btn" onclick="unlockAdmin()">Unlock</button>
+    <div id="adminArea" style="display:none;margin-top:20px">
+      <input id="pname" placeholder="Product Name" />
+      <input id="pimg" placeholder="Image URL" />
+      <textarea id="pdesc" placeholder="Description"></textarea>
+      <input id="pcat" placeholder="Category (tshirt / mug / uniform / bulk)" />
+      <input id="pprice" type="number" placeholder="Price (₹ INR)" />
+      <button class="btn" onclick="addProduct()">Add Product</button>
+    </div>
   </section>
 
   <section class="container" id="about">
@@ -99,7 +124,17 @@
   </footer>
 
   <script>
+    let const ADMIN_PASSWORD = "divisor@123";
+    let currentCategory='all'; = "divisor@123";
+    
     let products = JSON.parse(localStorage.getItem('products')) || [
+      {name:'Custom T-Shirt',category:'tshirt',img:'https://images.unsplash.com/photo-1520975916090-3105956dac38',desc:'High quality printed t-shirts',price:399},
+      {name:'Printed Mug',category:'mug',img:'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5',desc:'Photo & logo mugs',price:249},
+      {name:'School Uniform Printing',category:'uniform',img:'https://images.unsplash.com/photo-1596495578065-6e0763fa1178',desc:'Bulk school uniform printing',price:0}
+    ];(localStorage.getItem('products')) || [
+      {name:'Custom T-Shirt',img:'https://images.unsplash.com/photo-1520975916090-3105956dac38',desc:'High quality printed t-shirts',price:399},
+      {name:'Printed Mug',img:'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5',desc:'Photo & logo mugs',price:249}
+    ]; JSON.parse(localStorage.getItem('products')) || [(localStorage.getItem('products')) || [
       {name:'Custom T‑Shirt',img:'https://images.unsplash.com/photo-1520975916090-3105956dac38',desc:'High quality printed t‑shirts'},
       {name:'Printed Mug',img:'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5',desc:'Photo & logo mugs'}
     ];
@@ -107,16 +142,25 @@
     function render(){
       const grid=document.getElementById('productGrid');
       grid.innerHTML='';
-      products.forEach((p,i)=>{
-        grid.innerHTML+=`<div class="card"><img src="${p.img}"><h3>${p.name}</h3><p>${p.desc}</p><button onclick="removeProduct(${i})">Remove</button></div>`;
+      products.filter(p=>currentCategory==='all'||p.category===currentCategory).forEach((p,i)=>{
+        grid.innerHTML+=`<div class=\"card\"><img src=\"${p.img}\"><h3>${p.name}</h3><p>${p.desc}</p><p><b>₹ ${p.price}</b></p><a class=\"btn\" target=\"_blank\" href=\"https://wa.me/918679219613?text=I%20want%20to%20buy%20${encodeURIComponent(p.name)}%20Price:%20₹${p.price}\">Buy on WhatsApp</a><button onclick=\"removeProduct(${i})\">Remove</button></div>`;
       });
       localStorage.setItem('products',JSON.stringify(products));
     }
 
+    function unlockAdmin(){
+      if(adminPass.value===ADMIN_PASSWORD){
+        adminArea.style.display='block';
+        adminPass.style.display='none';
+      }else alert('Wrong Password');
+    }
+
+    function filterCategory(cat){currentCategory=cat;render();}
+
     function addProduct(){
       const name=pname.value,img=pimg.value,desc=pdesc.value;
       if(!name||!img) return alert('Fill details');
-      products.push({name,img,desc});
+      products.push({name,category:pcat.value||'other',img,desc,price});({name,img,desc,price});({name,img,desc});
       render();
       pname.value=pimg.value=pdesc.value='';
     }
